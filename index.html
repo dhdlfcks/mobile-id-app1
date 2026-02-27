@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모바일 신분증</title>
+
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+<style>
+body {
+  margin: 0;
+  background: #111;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  width: 380px;
+  background: #1c1c1c;
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 30px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  width: 90px;
+  height: 110px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.qr-section {
+  margin-top: 20px;
+  text-align: center;
+}
+
+canvas {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.timer {
+  margin-top: 10px;
+}
+
+.bottom {
+  margin-top: 20px;
+  display: flex;
+}
+
+button {
+  flex: 1;
+  margin: 5px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #333;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <div class="top">
+    <img src="profile.jpg" class="profile">
+    <div class="info">
+      <h2>오일찬</h2>
+      <p>2007년생</p>
+      <p>생일: 2007.10.13</p>
+    </div>
+  </div>
+
+  <div class="qr-section">
+    <canvas id="qrcode"></canvas>
+    <div class="timer">
+      남은 시간 <span id="timer">30</span>초
+    </div>
+  </div>
+
+  <div class="bottom">
+    <button onclick="showHome()">홈</button>
+    <button onclick="refreshQR()">QR</button>
+    <button onclick="showInfo()">정보</button>
+  </div>
+
+</div>
+
+<script>
+let timeLeft = 30;
+let countdown;
+
+const timer = document.getElementById("timer");
+const canvas = document.getElementById("qrcode");
+
+function generateQR() {
+  const data = "ID-" + Date.now();
+  QRCode.toCanvas(canvas, data, { width: 180 });
+}
+
+function startTimer() {
+  clearInterval(countdown);
+  timeLeft = 30;
+  timer.textContent = timeLeft;
+
+  countdown = setInterval(() => {
+    timeLeft--;
+    timer.textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+      refreshQR();
+    }
+  }, 1000);
+}
+
+function refreshQR() {
+  generateQR();
+  startTimer();
+}
+
+function showHome() {
+  alert("홈 화면");
+}
+
+function showInfo() {
+  alert("정보 화면");
+}
+
+generateQR();
+startTimer();
+</script>
+
+</body>
+</html>
